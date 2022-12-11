@@ -23,6 +23,30 @@ class _UsuariosAdminState extends State<UsuariosAdmin> {
       .child('usuarios')
       .orderByChild('rol')
       .equalTo(1);
+  final List l = [];
+  late DatabaseReference dbAlertas;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    dbAlertas = FirebaseDatabase.instance.ref().child('alertas');
+  }
+
+  void eliminarAlertas(String id) async {
+    var result = await FirebaseDatabase.instance
+        .ref()
+        .child("alertas")
+        .orderByChild('id')
+        .equalTo(id)
+        .get();
+    Map data = result.value as Map;
+    data.forEach((key, value) => l.add(key));
+    if (l.length > 0) {
+      for (var i = 0; i < l.length; i++) {
+        dbAlertas.child(l[i]).remove();
+      }
+    }
+  }
 
   Widget listUsuario({required Map usuario}) {
     return Container(
@@ -114,13 +138,15 @@ class _UsuariosAdminState extends State<UsuariosAdmin> {
                                           "¿Desea eliminar el usuario seleccionado?"),
                                       actions: [
                                         TextButton(
-                                            onPressed: (() {
+                                            onPressed: (() async {
                                               // Eliminacion de firebase
                                               FirebaseDatabase.instance
                                                   .ref()
                                                   .child('usuarios')
                                                   .child(usuario['key'])
                                                   .remove();
+                                              //Eliminacion de todos las alertas
+                                              eliminarAlertas(usuario['key']);
                                               Navigator.pop(context);
                                               Fluttertoast.showToast(
                                                   msg:

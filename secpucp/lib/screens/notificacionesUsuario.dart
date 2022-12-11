@@ -117,13 +117,38 @@ class _NotificacionesUsuarioState extends State<NotificacionesUsuario> {
                                 //Actualizo
                                 int util = alerta['info']['util'];
                                 util += 1;
-                                if (utilVoto != util) {
-                                  Map<String, int> updateUtil = {"util": util};
-                                  utilVoto = util;
-                                  db
-                                      .child(alerta['key'])
-                                      .update(updateUtil)
-                                      .then((value) => null);
+                                if (noutilVoto == 0) {
+                                  if (utilVoto != util) {
+                                    Map<String, Object> updateUtil = {
+                                      'info': {
+                                        'util': util,
+                                        'noutil': alerta['info']['noutil']
+                                      }
+                                    };
+                                    utilVoto = util;
+                                    db
+                                        .child(alerta['key'])
+                                        .update(updateUtil)
+                                        .then((value) => {
+                                              Fluttertoast.showToast(
+                                                  msg: "Se puntuó la alerta",
+                                                  toastLength:
+                                                      Toast.LENGTH_SHORT,
+                                                  gravity: ToastGravity.CENTER,
+                                                  backgroundColor:
+                                                      Colors.blueAccent,
+                                                  textColor: Colors.white,
+                                                  fontSize: 16.0)
+                                            });
+                                  }
+                                } else {
+                                  Fluttertoast.showToast(
+                                      msg: "Ya se puntuó la alerta",
+                                      toastLength: Toast.LENGTH_SHORT,
+                                      gravity: ToastGravity.CENTER,
+                                      backgroundColor: Colors.blueAccent,
+                                      textColor: Colors.white,
+                                      fontSize: 16.0);
                                 }
                               })),
                           const SizedBox(width: 1),
@@ -136,15 +161,39 @@ class _NotificacionesUsuarioState extends State<NotificacionesUsuario> {
                               onPressed: (() {
                                 int noutil = alerta['info']['noutil'];
                                 noutil += 1;
-                                if (noutilVoto != noutil) {
-                                  Map<String, int> updateUtil = {
-                                    "noutil": noutil
-                                  };
-                                  noutilVoto = noutil;
-                                  db
-                                      .child(alerta['key'])
-                                      .update(updateUtil)
-                                      .then((value) => null);
+                                if (utilVoto == 0) {
+                                  //Quiere decir que no ha botado en contra
+                                  if (noutilVoto != noutil) {
+                                    Map<String, Object> updateUtil = {
+                                      'info': {
+                                        'util': alerta['info']['util'],
+                                        'noutil': noutil
+                                      }
+                                    };
+                                    noutilVoto = noutil;
+                                    db
+                                        .child(alerta['key'])
+                                        .update(updateUtil)
+                                        .then((value) => {
+                                              Fluttertoast.showToast(
+                                                  msg: "Se puntuó la alerta",
+                                                  toastLength:
+                                                      Toast.LENGTH_SHORT,
+                                                  gravity: ToastGravity.CENTER,
+                                                  backgroundColor:
+                                                      Colors.blueAccent,
+                                                  textColor: Colors.white,
+                                                  fontSize: 16.0)
+                                            });
+                                  }
+                                } else {
+                                  Fluttertoast.showToast(
+                                      msg: "Ya se puntuó la alerta",
+                                      toastLength: Toast.LENGTH_SHORT,
+                                      gravity: ToastGravity.CENTER,
+                                      backgroundColor: Colors.blueAccent,
+                                      textColor: Colors.white,
+                                      fontSize: 16.0);
                                 }
                               })),
                         ],

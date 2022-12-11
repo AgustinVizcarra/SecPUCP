@@ -43,7 +43,7 @@ class _InicioAdminState extends State<InicioAdmin> {
               Row(
                 children: [
                   SizedBox(width: 40),
-                  Text("Robo",
+                  Text(alerta['tipo'],
                       style: TextStyle(
                           decoration: TextDecoration.underline,
                           color: Colors.white,

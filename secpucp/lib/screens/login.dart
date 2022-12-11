@@ -24,16 +24,26 @@ class Login extends StatelessWidget {
       if (newUser != null) {
         final uid = newUser.user!.uid;
         final snapshot = await dbRef.ref("usuarios/" + uid + "/rol").get();
-        if (snapshot.value == 1) {
-          //En Usuario
-          print("Usuario!");
-          Navigator.push(
-              context, MaterialPageRoute(builder: (context) => Home()));
+        if (snapshot.exists) {
+          if (snapshot.value == 1) {
+            //En Usuario
+            print("Usuario!");
+            Navigator.push(
+                context, MaterialPageRoute(builder: (context) => Home()));
+          } else {
+            //En Admin
+            print("Admin!");
+            Navigator.push(
+                context, MaterialPageRoute(builder: (context) => HomeAdmin()));
+          }
         } else {
-          //En Admin
-          print("Admin!");
-          Navigator.push(
-              context, MaterialPageRoute(builder: (context) => HomeAdmin()));
+          Fluttertoast.showToast(
+              msg: "Su cuenta ha sido eliminada",
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.CENTER,
+              backgroundColor: Colors.blueAccent,
+              textColor: Colors.white,
+              fontSize: 16.0);
         }
       } else {
         Fluttertoast.showToast(
