@@ -33,18 +33,17 @@ class _UsuariosAdminState extends State<UsuariosAdmin> {
   }
 
   void eliminarAlertas(String id) async {
-    var result = await FirebaseDatabase.instance
-        .ref()
-        .child("alertas")
-        .orderByChild('id')
-        .equalTo(id)
-        .get();
-    Map data = result.value as Map;
-    data.forEach((key, value) => l.add(key));
-    if (l.length > 0) {
-      for (var i = 0; i < l.length; i++) {
-        dbAlertas.child(l[i]).remove();
+    try {
+      var result = await dbAlertas.orderByChild('id').equalTo(id).get();
+      Map data = result.value as Map;
+      data.forEach((key, value) => l.add(key));
+      if (l.length > 0) {
+        for (var i = 0; i < l.length; i++) {
+          dbAlertas.child(l[i]).remove();
+        }
       }
+    } catch (e) {
+      print("El usuario no tenia notificaciones");
     }
   }
 
@@ -139,14 +138,14 @@ class _UsuariosAdminState extends State<UsuariosAdmin> {
                                       actions: [
                                         TextButton(
                                             onPressed: (() async {
+                                              //Eliminacion de todos las alertas
+                                              eliminarAlertas(usuario['key']);
                                               // Eliminacion de firebase
                                               FirebaseDatabase.instance
                                                   .ref()
                                                   .child('usuarios')
                                                   .child(usuario['key'])
                                                   .remove();
-                                              //Eliminacion de todos las alertas
-                                              eliminarAlertas(usuario['key']);
                                               Navigator.pop(context);
                                               Fluttertoast.showToast(
                                                   msg:

@@ -134,8 +134,7 @@ class _AlertasUsuarioState extends State<AlertasUsuario> {
                                                     // Eliminacion de firebase
                                                     DataSnapshot snapshot =
                                                         await dbUser
-                                                            .child(
-                                                                alerta['key'])
+                                                            .child(alerta['id'])
                                                             .get();
                                                     Map usuario =
                                                         snapshot.value as Map;
@@ -151,6 +150,10 @@ class _AlertasUsuarioState extends State<AlertasUsuario> {
                                                             1
                                                       }
                                                     };
+                                                    dbUser
+                                                        .child(alerta['id'])
+                                                        .update(updateCounter)
+                                                        .then((value) => {});
                                                     db
                                                         .child(alerta['key'])
                                                         .remove();
