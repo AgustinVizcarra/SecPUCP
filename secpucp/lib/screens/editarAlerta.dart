@@ -324,7 +324,9 @@ class _EditarNotificacionState extends State<EditarNotificacion> {
                               width: 180,
                               child: ElevatedButton(
                                 child: const Text("Actualizar mi alerta"),
-                                onPressed: () {},
+                                onPressed: () {
+                                  updateAlert(alert);
+                                },
                                 style: ElevatedButton.styleFrom(
                                     backgroundColor:
                                         Color.fromARGB(255, 0, 90, 141),
